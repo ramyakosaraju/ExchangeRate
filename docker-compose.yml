@@ -1,0 +1,30 @@
+version: "2"
+services:
+
+  db:
+    image: mysql/mysql-server:8.0
+    container_name: mysql1
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: exchangerate
+      MYSQL_ROOT_PASSWORD: newpassword
+      MYSQL_ROOT_HOST: mysql1
+      MYSQL_USER: root
+      MYSQL_PASSWORD: newpassword
+
+
+
+  web:
+    image: python5
+    build: .
+    container_name: python_001
+    depends_on:
+      - db
+    links:
+      - db
+      - db:database
+
+    ports:
+      - "5000:5000"
+
