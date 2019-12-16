@@ -155,7 +155,7 @@
        dest: /Docker/
    - name: Build image
      docker_image:
-       name: python5
+       name: ramyakosaraju/python5
        tag: ansible
        path: /Docker/
        state: present
@@ -215,6 +215,54 @@
      command: ./jmeter.sh -n -t /jmeter/Exchange.jmx
      args:
       chdir: /usr/apache-jmeter-5.2.1/bin/
+   - name: Log into private registry and force re-authorization
+     docker_login:
+       username: ramyakosaraju
+       password: S@!r@m2312
+       reauthorize: yes
+   - name: Tag and push to docker hub
+     docker_image:
+       name: ramyakosaraju/python5
+       tag: ansible
+       push: yes
+
+- hosts: production
+  gather_facts: true
+  become: True
+  become_user: root
+  tasks:
+   - name: Install Python3
+     raw: yum -y install python3
+   - name: Install docker
+     become: True
+     become_user: root
+     yum:
+       name: docker
+       state: latest
+   - name: Enable docker
+     service:
+       name: docker
+       enabled: yes
+   - name: Start docker service
+     become: True
+     become_user: root
+     service:
+       name: docker
+       state: started
+
+   - name: Install pip module
+     become: True
+     become_user: root
+     yum:
+       name: python-pip
+       state: latest
+   - name: Install Python docker module
+     become: True
+     become_user: root
+     pip: name=docker state=present
+   - name: Pull Docker Image
+     docker_image:
+       name: ramyakosaraju/python5:ansible
 
 
                      
