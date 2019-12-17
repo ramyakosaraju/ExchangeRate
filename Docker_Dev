@@ -15,7 +15,7 @@ stage('Docker Pushing Image'){
 stage('pushing docker to Dev_Environment'){
     def dockerRun = 'docker images'
     sshagent(['Redhat_test_ec2']) {
-        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.216.19.199 ${dockerRun}"
+        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.216.219.37 ${dockerRun}"
 }
 }
 }
