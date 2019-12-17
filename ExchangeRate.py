@@ -52,7 +52,7 @@ def hello():
 def insert_rate():
 
     
-    response = requests.get("https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=EUR&to_currency=INR&apikey=F971YDUS70YFOI5Y")
+    response = requests.get("https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=INR&apikey=F971YDUS70YFOI5Y")
     exchange_ratedata = json.loads(response.text)
 
     dollaramount = exchange_ratedata["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
