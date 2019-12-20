@@ -1,0 +1,21 @@
+
+node{
+     stage('Scm Checkout'){
+     git credentialsId: 'Github', url: 'https://github.com/ramyakosaraju/ExchangeRate.git'
+  }
+stage('Docker Image Building'){
+    sh 'docker build -t ramyakosaraju/python1:001 .'
+    }
+stage('Docker Pushing Image'){
+    withCredentials([string(credentialsId: 'DockerHub', variable: 'Dockerhub')]) {
+    sh "docker login -u ramyakosaraju -p ${Dockerhub}"
+}
+    sh 'docker push ramyakosaraju/python1:001'
+}
+stage('pushing docker to Dev_Environment'){
+    def dockerRun = 'docker images'
+    sshagent(['Redhat_test_ec2']) {
+        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.216.219.37 ${dockerRun}"
+}
+}
+}
