@@ -1,0 +1,66 @@
+---
+- hosts: production
+  gather_facts: true
+  become: True
+  remote_user: ec2-user
+  tasks:
+   - name: Install Python3
+     raw: yum -y install python3
+   - name: Install docker
+     become: True
+     become_user: root
+     yum:
+       name: docker
+       state: latest
+   - name: Enable docker
+     service:
+       name: docker
+       enabled: yes
+   - name: Start docker service
+     become: True
+     become_user: root
+     service:
+       name: docker
+       state: started
+
+   - name: Install pip module
+     become: True
+     become_user: root
+     yum:
+       name: python-pip
+       state: latest
+   - name: Install Python docker module
+     become: True
+     become_user: root
+     pip: name=docker state=present
+   - name: Pull Docker Image
+     docker_image:
+       name: ramyakosaraju/python5:ansible
+   - name: Download and install Docker Compose
+     get_url:
+        url: https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
+        dest: /usr/bin/docker-compose
+        mode: 0755
+   - name: Creates directory
+     file:
+       path: /Docker
+       state: directory
+   - name: Copying Docker file
+     copy:
+       src: /home/ramyakosaraju/docker/docker-compose.yml
+       dest: /Docker
+       mode: 0777
+   - name: create containers using docker-compose
+     command: docker-compose up -d
+     args:
+      chdir: /Docker/
+
+      
+
+
+
+
+
+                     
+
+
