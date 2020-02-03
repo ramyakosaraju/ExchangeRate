@@ -211,7 +211,7 @@
    - name: Log into private registry and force re-authorization
      docker_login:
        username: ramyakosaraju
-       password: S@!r@m2312
+       password: password
        reauthorize: yes
    - name: Tag and push to docker hub
      docker_image:
